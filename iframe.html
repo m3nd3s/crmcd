@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Iframe</title>
+  </head>
+  <body>
+    <h1>Iframe</h1>
+
+    <script charset="utf-8">
+      window.addEventListener("message", messageHandler, false);
+
+      function messageHandler(event) {
+        const { action, key, value } = event.data
+        var localStorageValues = []
+
+        if (action == 'save'){
+          window.localStorage.setItem(key, JSON.stringify(value))
+        } else if (action == 'get') {
+          event.source.postMessage({
+            action: 'returnData',
+            key: key,
+            value: JSON.parse(window.localStorage.getItem(key))
+          }, '*')
+        } else if (action == 'getAll') {
+          event.source.postMessage({
+            action: 'returnData'.
+            'all': 'all',
+            value: window.localStorage
+          })
+        }
+      }
+    </script>
+  </body>
+</html>

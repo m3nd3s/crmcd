@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Main Window</title>
+  </head>
+  <body>
+    <h1>Main Window</h1>
+
+    <a href="#" id="save-data" target="_blank">Save Data</a> |
+    <a href="#" id="read-data" target="_blank">Read Data</a>
+    <a href="#" id="read-all" target="_blank">Read All Data</a>
+
+    <iframe src="https://staging.plugcrm.net/iframe.html" id="iframe-id" frameborder="0"></iframe>
+
+    <script charset="utf-8">
+      function saveData(event){
+        event.preventDefault();
+
+        const data = { name: 'RDSCRM' }
+        const iframe = document.getElementById('iframe-id')
+
+        iframe.contentWindow.postMessage({
+          action: 'save',
+          key: 'keyForData',
+          value: data
+        }, '*')
+
+        console.log("Data saved");
+      }
+
+      var buttonSave = document.getElementById('save-data');
+      buttonSave.onclick = saveData;
+
+
+      function readData(event) {
+        event.preventDefault();
+        const iframe = document.getElementById('iframe-id')
+
+        iframe.contentWindow.postMessage({
+          action: 'get',
+          key: 'keyForData'
+        }, '*')
+      }
+
+      var buttonRead = document.getElementById('read-data');
+      buttonRead.onclick = readData;
+
+      function readAllData(event) {
+        event.preventDefault();
+
+        const iframe = document.getElementById('iframe-id')
+
+        iframe.contentWindow.postMessage({
+          action: 'getAll',
+          key: 'keyForData'
+        }, '*')
+      }
+
+      var buttonReadAll = document.getElementById('read-all');
+      buttonReadAll.onclick = readAllData;
+
+      window.addEventListener("message", messageHandler, false);
+      function messageHandler(event) {
+        const { action, key, value } = event.data
+
+        if (action == 'returnData'){
+          console.log(key, value)
+        }
+      }
+    </script>
+  </body>
+</html>
