@@ -13,7 +13,7 @@
 
       function messageHandler(event) {
         const { action, key, value } = event.data
-        var localStorageValues = []
+        var localStorageJSON = {}
 
         if (action == 'save'){
           window.localStorage.setItem(key, JSON.stringify(value))
@@ -24,10 +24,16 @@
             value: JSON.parse(window.localStorage.getItem(key))
           }, '*')
         } else if (action == 'getAll') {
+          keys = Object.keys(window.localStorage);
+
+          keys.forEach(function(e){
+            localStorageJSON[e] = window.localStorage.getItem(e)
+          });
+
           event.source.postMessage({
-            action: 'returnData'.
+            action: 'returnData',
             'all': 'all',
-            value: window.localStorage
+            value: localStorageJSON
           })
         }
       }
